@@ -8,13 +8,21 @@ My air conditioning sucks and I got tired of getting up to turn the fan on or of
 
 The hardware is just an ESP8266 with one of its GPIO pins used to switch a high voltage relay in line with the fan's power.
 
-![Schematic for internet connected fan](https://git.benhaney.com/Ben/Fan/raw/master/schematic.png)
+![Schematic for internet connected fan](https://git.benhaney.com/Ben/Fan/raw/branch/master/schematic.png)
 
 The software for the ESP8266 just exposes an API endpoint for turning any of its GPIO pins on or off. If it doesn't have WiFi credentials stored in its EEPROM, it becomes a wireless access point and lets you connect directly to it to set its credentials.
 
 This is intended to work in tandem with code running on other systems that expose the actual user interface and then perform an operation using the embedded device's API. For example, I have my server proxying a subdomain to my fan on my local network, and then I have a keybind on my laptop that curls the subdomain with a query to toggle the in-use GPIO pin.
 
 Because of how generic this is, you could really use it as an internet connected power switch for any arbitrary appliance (I've done something similar in the past with light switches and it worked great despite probably being a huge fire hazard).
+
+## Usage
+
+`/` shows GPIO pin status
+
+`/gpio` takes any number of GET parameters with the key being the GPIO number and the value being the new state. For example, `/gpio?2=0` turns off GPIO2. `/gpio?0=toggle` toggles GPIO0.
+
+`/settings` requires the GET parameters "ssid" and "pass" to be set. They will be set as the new WiFi credentials and the ESP8266 will be rebooted.
 
 ## License
 
